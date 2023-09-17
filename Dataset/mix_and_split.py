@@ -40,7 +40,7 @@ class AudioMixtureDataset(Dataset):
 
         # Convert to PyTorch tensor and return
         return torch.tensor(mixed_audio, dtype=torch.float32)
-
+    
     # Main code
 if __name__ == "__main__":
     directory = "Dataset/data/classes"
@@ -59,3 +59,4 @@ if __name__ == "__main__":
     torch.save(test_dataset, "Preprocessed_dataset/test_dataset.pt")
     
     # Now you can use train_loader, val_loader, and test_loader in your training and evaluation loops
+

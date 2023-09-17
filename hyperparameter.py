@@ -1,13 +1,13 @@
 # Data and file paths
-RAW_DATA_PATH = 'Dataset/data/raw_data.csv'
-TRAIN_DATA_PATH = 'Dataset/data/train_data.csv'
-TEST_DATA_PATH = 'Dataset/data/test_data.csv'
-PROCESSED_TRAIN_DATA_PATH = 'Dataset/data/processed_train.csv'
-PROCESSED_TEST_DATA_PATH = 'Dataset/data/processed_test.csv'
+RAW_DATA_PATH = 'Dataset/data'
+TRAIN_DATA_PATH = 'Dataset/data'
+TEST_DATA_PATH = 'Dataset/data'
+PROCESSED_TRAIN_DATA_PATH = 'Dataset/data'
+PROCESSED_TEST_DATA_PATH = 'Dataset/data'
 RESULT_FILE_NAME = 'evaluation_metrics'
 
 # Data split parameters
-TEST_SIZE = 0.2
+TEST_SIZE = 0.3
 
 # Data loader parameters
 BATCH_SIZE = 32
