@@ -101,14 +101,14 @@ parser.add_argument('--visdom_id', default='TasNet training',
 def main(args):
     # Construct Solver
     # data
-    tr_dataset = AudioDataset(args.train_dir, args.batch_size,
-                              sample_rate=args.sample_rate, segment=args.segment)
-    cv_dataset = AudioDataset(args.valid_dir, batch_size=1,  # 1 -> use less GPU memory to do cv
-                              sample_rate=args.sample_rate,
-                              segment=-1, cv_maxlen=args.cv_maxlen)  # -1 -> use full audio
+    tr_dataset = AudioDataset(train_dir, batch_size,
+                              sample_rate=sample_rate, segment=segment)
+    cv_dataset = AudioDataset(valid_dir, batch_size=1,  # 1 -> use less GPU memory to do cv
+                              sample_rate=sample_rate,
+                              segment=-1, cv_maxlen=cv_maxlen)  # -1 -> use full audio
     tr_loader = AudioDataLoader(tr_dataset, batch_size=1,
-                                shuffle=args.shuffle,
-                                num_workers=args.num_workers)
+                                shuffle=shuffle,
+                                num_workers=num_workers)
     cv_loader = AudioDataLoader(cv_dataset, batch_size=1,
                                 num_workers=0)
     data = {'tr_loader': tr_loader, 'cv_loader': cv_loader}
@@ -120,23 +120,30 @@ def main(args):
     P = 3	
     X = 8	
     R = 4
-    model = ConvTasNet(args.N, args.L, args.B, args.H, args.P, args.X, args.R,
-                       args.C, norm_type=args.norm_type, causal=args.causal,
-                       mask_nonlinear=args.mask_nonlinear)
+    C = 2
+    use_cuda = True
+    optimizer = 'sgd'
+    norm_type = 'gLN'
+    lr = 0.0001
+    momentum = 0.0
+    l2 =0.0
+    model = ConvTasNet(N, L, B, H, P, X, R,
+                       C, norm_type=norm_type, causal=False,
+                       mask_nonlinear='relu')
     print(model)
-    if args.use_cuda:
+    if use_cuda:
         model = torch.nn.DataParallel(model)
         model.cuda()
     # optimizer
-    if args.optimizer == 'sgd':
+    if optimizer == 'sgd':
         optimizier = torch.optim.SGD(model.parameters(),
-                                     lr=args.lr,
-                                     momentum=args.momentum,
-                                     weight_decay=args.l2)
-    elif args.optimizer == 'adam':
+                                     lr=lr,
+                                     momentum=momentum,
+                                     weight_decay=l2)
+    elif optimizer == 'adam':
         optimizier = torch.optim.Adam(model.parameters(),
-                                      lr=args.lr,
-                                      weight_decay=args.l2)
+                                      lr=lr,
+                                      weight_decay=l2)
     else:
         print("Not support optimizer")
         return
